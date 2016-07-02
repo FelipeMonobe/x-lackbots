@@ -8,8 +8,9 @@ Classes:
 - Projectbot: WIP;
 
 Requirements:
-- Setting up your bot user @https://api.slack.com/bot-users
-- Make sure the bot is inside whatever channel you like
+- Read 'Setting up your bot user' OR skip directly to next step
+- Create new user bot @https://my.slack.com/services/new/bot
+- Make sure the bot is inside whatever channel you want
 
 Follow up steps:
 ```
