@@ -1,0 +1,7 @@
+{
+  "command": "help",
+  "triggers": ["ajuda", "help", "comandos", "commands"],
+  "target": "channel",
+  "action": "listCmds",
+  "description": "Lista todos os comandos disponíveis para este bot"
+}

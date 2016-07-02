@@ -1,0 +1,38 @@
+{
+  "name": "x-lackbots",
+  "version": "1.0.0",
+  "description": "Slack bots for better workflow, alignment and productivity at development projects",
+  "main": "main.js",
+  "scripts": {
+    "build": "echo \"\n1. babel transpiling...\" && ./node_modules/.bin/babel src -d dist --presets babel-preset-es2015 -s --copy-files",
+    "start": "npm run -s build && echo \"\n2. node starting up...\n\" && node ./dist/main.js",
+    "test": "echo \"to be implemented.\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelipeMonobe/slackbots.git"
+  },
+  "keywords": [
+    "x-lackbots",
+    "slack",
+    "bots",
+    "slackbots",
+    "productivity",
+    "javascript",
+    "js",
+    "es2015"
+  ],
+  "author": "Felipe Monobe",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FelipeMonobe/slackbots/issues"
+  },
+  "homepage": "https://github.com/FelipeMonobe/slackbots#readme",
+  "devDependencies": {
+    "babel-cli": "^6.10.1",
+    "babel-preset-es2015": "^6.9.0"
+  },
+  "dependencies": {
+    "slackbots": "^0.5.1"
+  }
+}
