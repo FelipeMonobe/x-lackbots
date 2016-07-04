@@ -1,7 +1,7 @@
 import XlackBot from './base/xlackbot';
 
 function main() {
-  let testebot = new XlackBot('testebot', 'xoxb-56380232500-Y7QDDBvMGbLfHcy0MDX89znX', 'slackbots');
+  let testebot = new XlackBot('testebot', process.env.TOKEN_TESTEBOT, 'slackbots');
 
   testebot.run();
 };

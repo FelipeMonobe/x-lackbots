@@ -17,3 +17,13 @@ Follow up steps:
 $ npm install
 $ npm run start
 ```
+
+Unix systems:
+```
+$ TOKEN_TESTEBOT="aaaa-11111111111-abcdefghiklmno1234567890"; export TOKEN_TESTEBOT;
+```
+
+Windows systems:
+```
+$ set TOKEN_TESTEBOT=aaaa-11111111111-abcdefghiklmno123456789
+```

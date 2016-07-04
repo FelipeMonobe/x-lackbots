@@ -2,6 +2,6 @@
   "command": "help",
   "triggers": ["ajuda", "help", "comandos", "commands"],
   "target": "channel",
-  "action": "listCmds",
+  "action": "_listCmds",
   "description": "Lista todos os comandos disponíveis para este bot"
 }
