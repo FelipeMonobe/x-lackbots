@@ -15,7 +15,7 @@ Requirements:
 Follow up steps:
 ```
 $ npm install
-$ npm run start
+$ npm start
 ```
 
 Unix systems:
