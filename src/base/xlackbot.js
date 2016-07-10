@@ -4,13 +4,15 @@ export default class XlackBot {
   constructor(name, token, channel) {
     this._channel  = channel;
     this._commands = [];
+    this._cmdPaths = [{ rel: __dirname + '/commands/',
+    abs: __dirname + '/commands/'}];
     this._core     = new Bot({ name, token });
     this._id       = '';
     this._name     = name;
   }
 
-  _checkForTriggers(text) {
-    let textCmd = /\w+\b$/.exec(text)[0];
+  _checkTriggers(text) {
+    let textCmd = /\s(\w+)\b/.exec(text)[1];
     return this._commands.find(cmd => cmd.triggers.indexOf(textCmd) > -1);
   }
 
@@ -20,13 +22,18 @@ export default class XlackBot {
       msg.user !== this._id;
   }
 
-  _fetchCommands() {
+  _fetchCommands(dirs) {
     const FS = require('fs');
     let commands = [];
 
-    FS
-      .readdirSync('./dist/base/commands/')
-      .forEach(file => commands.push(require(`./commands/${file}`)));
+    this._cmdPaths
+      .forEach(path => {
+        FS
+          .readdirSync(path.rel)
+          .forEach(file =>
+            commands.push(require(path.abs + file))
+          );
+        });
 
     return commands;
   }
@@ -44,9 +51,9 @@ export default class XlackBot {
     console.log(`Message '${JSON.stringify(msg)}' was received`);
 
     if (this._checkTypeAndUser(msg)) {
-      let command = this._checkForTriggers(msg.text);
+      let command = this._checkTriggers(msg.text);
 
-      return !command || this[command.action]();
+      return !command || this[command.action](msg);
     }
 
     return;

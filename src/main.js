@@ -1,9 +1,10 @@
 import XlackBot from './base/xlackbot';
+import ScrumBot from './scrumbot/scrumbot';
 
 function main() {
-  let testebot = new XlackBot('testebot', process.env.TOKEN_TESTEBOT, 'slackbots');
+  let scrumbot = new ScrumBot('scrumbot', process.env.TOKEN_SCRUMBOT, 'slackbots');
 
-  testebot.run();
+  scrumbot.run();
 };
 
 main();
