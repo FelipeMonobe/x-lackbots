@@ -3,9 +3,9 @@ import XlackBot from '../base/xlackbot';
 export default class ScrumBot extends XlackBot {
   constructor(name, token, channel) {
     super(name, token, channel);
-    this._id       = '';
-    this._messages = require('./messages.json');
+    this._alerts           = require('./alerts.json');
     this._currentIntervals = [];
+    this._id               = '';
     this._cmdPaths.push({ rel: './dist/scrumbot/commands/',
     abs: __dirname
           .split('/')
@@ -21,19 +21,49 @@ export default class ScrumBot extends XlackBot {
   _listCmds()             { return super._listCmds();             }
   _onMessage(msg)         { return super._onMessage(msg);         }
   _replyChannel(msg)      { return super._replyChannel(msg);      }
-  _onStart()              { return super._onStart();              }
 
-  _alert(eventType, time) {
+  _checkTimeNotPast(hours, minutes) {
+    return hours > new Date().getHours() ||
+      (hours === new Date().getHours() &&
+      minutes > new Date().getMinutes());
+  }
+
+  _checkScheduledAlerts() {
+    return this._alerts
+      .forEach(alert => this
+        ._setAlert(alert));
+  }
+
+  _extractAlertInfo(msg) {
+    let params = msg.text.split(' ').splice(2, 4),
+
+    return this
+      ._setAlert({
+        event: params[0],
+        message: params[1],
+        time: params[2],
+        frequencyInDays: parseInt(params[3])
+      });
+  }
+
+  _saveAlert(alert) {
+    this._alerts.push(alert);
+
+    return require('fs')
+      .writeFileSync('alerts.json', JSON.stringify(this._alerts));
+  }
+
+  _setAlert(alert) {
     let that = this,
         aux = [],
         intervalId = 0,
-        splittedTime = time.split(':'),
+        splittedTime = alert.time.split(':'),
         hours = parseInt(splittedTime[0]),
         minutes = parseInt(splittedTime[1]),
         nowDate = new Date(),
         timeLeft = 0,
         timeReccurrence = 86400000,
-        alertDate = this._checkNotPassed(hours, minutes) ?
+        alertDate = this._checkTimeNotPast(hours, minutes) ?
           new Date(nowDate.getFullYear(),
             nowDate.getMonth(),
             nowDate.getDay(),
@@ -49,9 +79,11 @@ export default class ScrumBot extends XlackBot {
 
     timeLeft = alertDate.getTime() - nowDate.getTime();
 
+    this._saveAlert(alert);
+
     setTimeout(() => {
       aux = that._currentIntervals
-        .filter(interval => interval.eventType === eventType);
+        .filter(interval => interval.eventType === alert.event);
 
       if(aux.length) {
         clearInterval(aux[0].intervalId);
@@ -63,34 +95,22 @@ export default class ScrumBot extends XlackBot {
         let dayOfWeek = new Date().getDay();
 
         if(dayOfWeek !== 0 && dayOfWeek !== 6) return that
-          ._replyChannel(that._messages[eventType]);
+          ._replyChannel(that._alerts[alert.event]);
       }, timeReccurrence);
 
       that._currentIntervals.push({
           intervalId: intervalId,
-          eventType: eventType
+          eventType: alert.event
       });
     }, timeLeft);
   }
 
-  _checkNotPassed(hours, minutes) {
-    return hours > new Date().getHours() ||
-      (hours === new Date().getHours() &&
-      minutes > new Date().getMinutes());
-  }
+  _onStart() {
+    super.
+      _onStart();
 
-  _setAlert(msg) {
-    let params = msg.text.split(' ').splice(2, 3);
-
-    if(!this._messages[params[0]]) return this
-      ._replyChannel('Esse evento não existe. Os eventos são: ' +
-      Object.keys(this._messages).toString());
-
-    this
-      ._alert(params[0], params[1]);
-
-    return this
-      ._replyChannel('Alerta configurado com sucesso.');
+    return this.
+      _checkScheduledAlerts();
   }
 
   run() { return super.run(); }
