@@ -35,7 +35,7 @@ export default class ScrumBot extends XlackBot {
   }
 
   _extractAlertInfo(msg) {
-    let params = msg.text.split(' ').splice(2, 4),
+    let params = msg.text.split(' ').splice(2, 4);
 
     return this
       ._setAlert({
