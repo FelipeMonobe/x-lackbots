@@ -1,0 +1,7 @@
+{
+  "command": "uptime",
+  "triggers": ["uptime"],
+  "target": "channel",
+  "action": "_showUptime",
+  "description": "Mostra quanto tempo este bot está vivo"
+}

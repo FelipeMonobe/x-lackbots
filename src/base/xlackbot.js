@@ -2,6 +2,7 @@ import Bot from 'slackbots';
 
 export default class XlackBot {
   constructor(name, token, channel) {
+    this._birth    = new Date();
     this._channel  = channel;
     this._commands = [];
     this._cmdPaths = [{ rel: __dirname + '/commands/',
@@ -61,13 +62,21 @@ export default class XlackBot {
 
   _onStart() {
     this._id = this._core.self.id;
-    this._replyChannel(`${this._name} has just joined the party :cubimal_chick:`);
     return console.log(`${this._name} is alive at #${this._channel}`);
   }
 
   _replyChannel(msg) {
     return this._core
       .postMessageToChannel(this._channel, msg, { as_user: true });
+  }
+
+  _showUptime() {
+    let uptime = new Date(new Date() - this._birth)
+      .toISOString()
+      .split('T')[1];
+
+    return this.
+      _replyChannel(uptime);
   }
 
   run() {
