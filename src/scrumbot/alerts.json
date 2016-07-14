@@ -1,16 +1,16 @@
 [{
-    "event": "daily",
     "message": "BEEP BEEP! Olha a daily aê cambada!",
+    "event": "daily",
     "time": "15:00",
     "frequencyInDays": 1
 }, {
-    "event": "planning",
     "message": "BEEP BEEP! Vamos ver o que vai rolar!",
+    "event": "planning",
     "time": "13:00",
     "frequencyInDays": 14
 }, {
-    "event": "review",
     "message": "BEEP BEEP! Passem a régua e troquem figurinhas!",
+    "event": "review",
     "time": "9:00",
     "frequencyInDays": 14
 }]

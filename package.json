@@ -4,8 +4,8 @@
   "description": "Slack bots for better workflow, alignment and productivity at development projects",
   "main": "main.js",
   "scripts": {
-    "build": "echo \"\n1. babel transpiling...\" && ./node_modules/.bin/babel src -d dist --presets babel-preset-es2015 -s --copy-files",
-    "start": "npm run -s build && echo \"\n2. node starting up...\n\" && node ./dist/main.js",
+    "build": "echo \"\nbabel transpiling...\" && ./node_modules/.bin/babel src -d dist --presets babel-preset-es2015 -s --copy-files",
+    "start": "node starting up...\n\" && node ./dist/main.js",
     "test": "echo \"to be implemented.\""
   },
   "repository": {
