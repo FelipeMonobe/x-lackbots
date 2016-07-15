@@ -12,13 +12,11 @@ export default class XlackBot {
     this._name     = name;
   }
 
-  _checkMsgTarget() {
-
-  }
-
   _checkTriggers(text) {
     let textCmd = /\s(\w+)\b/.exec(text)[1];
-    return this._commands.find(cmd => cmd.triggers.indexOf(textCmd) > -1);
+
+    return this._commands
+      .find(cmd => cmd.triggers.indexOf(textCmd) > -1);
   }
 
   _checkTypeAndUser(msg) {
@@ -28,28 +26,23 @@ export default class XlackBot {
   }
 
   _fetchCommands(dirs) {
-    const FS = require('fs');
     let commands = [];
 
     this._cmdPaths
       .forEach(path => {
-        FS
-          .readdirSync(path.rel)
-          .forEach(file =>
-            commands.push(require(path.abs + file))
-          );
+        require('fs').readdirSync(path.rel)
+          .forEach(file => commands.push(require(path.abs + file)));
         });
 
     return commands;
   }
 
   _listCmds() {
-    return this
-      ._replyChannel('Meus comandos são:\n' +
+    return this._replyChannel('Meus comandos são:\n' +
         this._commands
-        .map(cmd => `- ${cmd.triggers.toString().replace(/,/g, '/')}: ${cmd.description};`)
-        .toString()
-        .replace(/,/g, '\n'));
+          .map(cmd => `- ${cmd.triggers.toString().replace(/,/g, '/')}: ${cmd.description};`)
+          .toString()
+          .replace(/,/g, '\n'));
   }
 
   _onMessage(msg) {
@@ -77,8 +70,7 @@ export default class XlackBot {
   _showUptime() {
     let dif = new Date(new Date() - this._birth);
 
-    return this.
-      _replyChannel(`Vivo por ${dif.getDate()}d ${dif.getHours()}h${dif.getMinutes()}m`);
+    return this._replyChannel(`Vivo por ${dif.getDate()}d ${dif.getHours()}h${dif.getMinutes()}m`);
   }
 
   run() {

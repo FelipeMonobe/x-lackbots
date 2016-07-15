@@ -8,8 +8,7 @@ export default class ScrumBot extends XlackBot {
     this._id               = '';
     this._cmdPaths.push({
       rel: './dist/scrumbot/commands/',
-      abs: __dirname
-        .split('/')
+      abs: __dirname.split('/')
         .splice(0, __dirname.split('/').length - 1)
         .join('/') + '/' + this._name + '/commands/'
     });
@@ -29,8 +28,7 @@ export default class ScrumBot extends XlackBot {
 
   _checkScheduledAlerts() {
     return this._alerts
-      .forEach(alert => this
-        ._setAlert(alert));
+      .forEach(alert => this._setAlert(alert));
   }
 
   _extractAlertInfo(msg) {
@@ -39,13 +37,20 @@ export default class ScrumBot extends XlackBot {
       .filter(i => i && i.trim())
       .splice(2, 5);
 
-    return this
-      ._setAlert({
-        message: params[0],
-        event: params[1],
-        time: params[2],
-        frequencyInDays: parseInt(params[3])
-      });
+    return this._setAlert({
+      message: params[0],
+      event: params[1],
+      time: params[2],
+      frequencyInDays: parseInt(params[3])
+    });
+  }
+
+  _listAlerts() {
+    return this._replyChannel(
+      this._alerts
+        .map(alert => `Evento: ${alert.event}, Horário: ${alert.time}, Frequência: ${alert.frequencyInDays}`)
+        .join('\n')
+    );
   }
 
   _updateAlerts(alert, remove = false) {
@@ -53,41 +58,42 @@ export default class ScrumBot extends XlackBot {
       .filter(a => a.event !== alert.event);
 
     if(remove) {
-      clearInterval(
-        this._currentIntervals
-          .find(a => a.event = alert.event).intervalId
-        );
+      let selectedAlert = this._currentIntervals
+          .find(a => a.event = alert.event);
+
+      clearTimeout(selectedAlert.timeoutId);
+      clearInterval(selectedAlert.intervalId);
     } else {
       this._alerts.push(alert);
     }
 
-    return require('fs')
-      .writeFileSync('./dist/scrumbot/alerts.json',
-        JSON.stringify(this._alerts));
+    this._replyChannel(`Alerta ${alert.event} removido.`);
+
+    return require('fs').writeFileSync('./dist/scrumbot/alerts.json',
+      JSON.stringify(this._alerts));
   }
 
   _sendAlert(alert){
-    let dayOfWeek = new Date()
-      .getDay();
+    let dayOfWeek = new Date().getDay();
 
     if (dayOfWeek !== 0 && dayOfWeek !== 6)
-      return this
-        ._replyChannel(this._alerts
-          .find(a => a.event === alert.event)
-            .message);
+      return this._replyChannel(this._alerts
+        .find(a => a.event === alert.event)
+        .message.replace(/"/g, ''));
   }
 
   _setAlert(alert) {
-    let that = this,
-      aux = [],
-      intervalId = 0,
-      splittedTime = alert.time.split(':'),
-      hours = parseInt(splittedTime[0]),
-      minutes = parseInt(splittedTime[1]),
-      nowDate = new Date(),
-      timeLeft = 0,
+    let that          = this,
+      aux             = [],
+      intervalId      = 0,
+      timeoutId       = 0,
+      splittedTime    = alert.time.split(':'),
+      hours           = parseInt(splittedTime[0]),
+      minutes         = parseInt(splittedTime[1]),
+      nowDate         = new Date(),
+      timeLeft        = 0,
       timeReccurrence = 86400000 * alert.frequencyInDays,
-      alertDate = this._checkTimeNotPast(hours, minutes) ?
+      alertDate       = this._checkTimeNotPast(hours, minutes) ?
       new Date(nowDate.getFullYear(),
         nowDate.getMonth(),
         nowDate.getDate(),
@@ -114,36 +120,32 @@ export default class ScrumBot extends XlackBot {
 
     this._updateAlerts(alert);
 
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       that._sendAlert(alert);
       intervalId = setInterval(() => that._sendAlert(alert), timeReccurrence);
-
-      that._currentIntervals
-        .push({
-          intervalId: intervalId,
-          eventType: alert.event
-      });
     }, timeLeft);
 
-    return this
-      ._replyChannel(`Alerta para *${alert.event}* configurado para às ${alert.time}, a cada ${alert.frequencyInDays} dia(s).`);
+    that._currentIntervals
+      .push({
+        intervalId: intervalId,
+        timeoutId: timeoutId,
+        eventType: alert.event
+      });
+
+    return this._replyChannel(`Alerta *${alert.event}* às ${alert.time}, a cada ${alert.frequencyInDays} dia(s).`);
   }
 
   _onStart() {
-    super.
-      _onStart();
-
-    return this.
-      _checkScheduledAlerts();
+    super._onStart();
+    return this._checkScheduledAlerts();
   }
 
   _unsetAlert(msg) {
     let alertEvent = msg.split(' ')[2];
 
-    return this
-      ._updateAlerts({
-        event: alertEvent
-      }, true);
+    return this._updateAlerts({
+      event: alertEvent
+    }, true);
   }
 
   run() { return super.run(); }

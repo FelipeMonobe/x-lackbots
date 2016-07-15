@@ -1,0 +1,7 @@
+{
+  "command": "listAlerts",
+  "triggers": ["listar", "list"],
+  "target": "channel",
+  "action": "_listAlerts",
+  "description": "Lista todos alertas."
+}
