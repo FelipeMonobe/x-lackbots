@@ -68,7 +68,7 @@ export default class XlackBot {
   }
 
   _showUptime() {
-    return this._replyChannel('Vivo desde: ' + this._birth);
+    return this._replyChannel('Vivo desde ' + this._birth.toLocaleString());
   }
 
   run() {
