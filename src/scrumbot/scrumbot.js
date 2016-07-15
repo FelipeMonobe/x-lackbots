@@ -63,11 +63,10 @@ export default class ScrumBot extends XlackBot {
 
       clearTimeout(selectedAlert.timeoutId);
       clearInterval(selectedAlert.intervalId);
+      this._replyChannel(`Alerta *${alert.event}* removido.`);
     } else {
       this._alerts.push(alert);
     }
-
-    this._replyChannel(`Alerta ${alert.event} removido.`);
 
     return require('fs').writeFileSync('./dist/scrumbot/alerts.json',
       JSON.stringify(this._alerts));

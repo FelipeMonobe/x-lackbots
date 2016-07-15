@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "build": "echo \"\nbabel transpiling...\" && ./node_modules/.bin/babel src -d dist --presets babel-preset-es2015 -s --copy-files",
-    "start": "echo \"\nstarting up...\n\" && node ./dist/main.js",
+    "start": "echo \"\nstarting up...\n\" && npm run build && node ./dist/main.js",
     "test": "echo \"to be implemented.\""
   },
   "repository": {
