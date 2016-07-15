@@ -68,9 +68,7 @@ export default class XlackBot {
   }
 
   _showUptime() {
-    let dif = new Date(new Date() - this._birth);
-
-    return this._replyChannel(`Vivo por ${dif.getDate()}d ${dif.getHours()}h${dif.getMinutes()}m`);
+    return this._replyChannel('Vivo desde: ' + this._birth);
   }
 
   run() {
