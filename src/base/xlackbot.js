@@ -12,6 +12,10 @@ export default class XlackBot {
     this._name     = name;
   }
 
+  _checkMsgTarget() {
+
+  }
+
   _checkTriggers(text) {
     let textCmd = /\s(\w+)\b/.exec(text)[1];
     return this._commands.find(cmd => cmd.triggers.indexOf(textCmd) > -1);
@@ -54,7 +58,7 @@ export default class XlackBot {
     if (this._checkTypeAndUser(msg)) {
       let command = this._checkTriggers(msg.text);
 
-      return !command || this[command.action](msg);
+      return !command || this[command.action](msg, command.target);
     }
 
     return;
@@ -71,12 +75,10 @@ export default class XlackBot {
   }
 
   _showUptime() {
-    let uptime = new Date(new Date() - this._birth)
-      .toISOString()
-      .split('T')[1];
+    let dif = new Date(new Date() - this._birth);
 
     return this.
-      _replyChannel(uptime);
+      _replyChannel(`Vivo por ${dif.getDate()}d ${dif.getHours()}h${dif.getMinutes()}m`);
   }
 
   run() {

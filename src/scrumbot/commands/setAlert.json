@@ -1,0 +1,7 @@
+{
+  "command": "setAlert",
+  "triggers": ["alert", "alertar"],
+  "target": "channel",
+  "action": "_extractAlertInfo",
+  "description": "Configura novos alertas. Formato: `scrumbot alertar [evento] \"[mensagem]\" [horario] [frequencia(dias)]` \n\nEx: `scrumbot alertar \"BEEP BEEP! mensagem de alerta!\" daily 15:00 1`"
+}

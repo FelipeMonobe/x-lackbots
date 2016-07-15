@@ -1,0 +1,7 @@
+{
+  "command": "unsetAlert",
+  "triggers": ["unset", "remove", "remover"],
+  "target": "channel",
+  "action": "_unsetAlert",
+  "description": "Remove alertas. Formato: `scrumbot remover [evento]`"
+}

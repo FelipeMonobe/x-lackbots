@@ -3,14 +3,4 @@
     "event": "daily",
     "time": "15:00",
     "frequencyInDays": 1
-}, {
-    "message": "BEEP BEEP! Vamos ver o que vai rolar!",
-    "event": "planning",
-    "time": "13:00",
-    "frequencyInDays": 14
-}, {
-    "message": "BEEP BEEP! Passem a régua e troquem figurinhas!",
-    "event": "review",
-    "time": "9:00",
-    "frequencyInDays": 14
 }]

@@ -3,39 +3,24 @@ import XlackBot from '../base/xlackbot';
 export default class ScrumBot extends XlackBot {
   constructor(name, token, channel) {
     super(name, token, channel);
-    this._alerts = require('./alerts.json');
+    this._alerts           = require('./alerts.json');
     this._currentIntervals = [];
-    this._id = '';
+    this._id               = '';
     this._cmdPaths.push({
       rel: './dist/scrumbot/commands/',
       abs: __dirname
         .split('/')
-        .splice(0, __dirname.split('/')
-          .length - 1)
-        .join('/') +
-        '/' + this._name +
-        '/commands/'
+        .splice(0, __dirname.split('/').length - 1)
+        .join('/') + '/' + this._name + '/commands/'
     });
   }
 
-  _checkTriggers(text) {
-    return super._checkTriggers(text);
-  }
-  _checkTypeAndUser(msg) {
-    return super._checkTypeAndUser(msg);
-  }
-  _fetchCommands(dirs) {
-    return super._fetchCommands(dirs);
-  }
-  _listCmds() {
-    return super._listCmds();
-  }
-  _onMessage(msg) {
-    return super._onMessage(msg);
-  }
-  _replyChannel(msg) {
-    return super._replyChannel(msg);
-  }
+  _checkTriggers(text)   { return super._checkTriggers(text);   }
+  _checkTypeAndUser(msg) { return super._checkTypeAndUser(msg); }
+  _fetchCommands(dirs)   { return super._fetchCommands(dirs);   }
+  _listCmds()            { return super._listCmds();            }
+  _onMessage(msg)        { return super._onMessage(msg);        }
+  _replyChannel(msg)     { return super._replyChannel(msg);     }
 
   _checkTimeNotPast(hours, minutes) {
     return hours > new Date().getHours() ||
@@ -63,11 +48,18 @@ export default class ScrumBot extends XlackBot {
       });
   }
 
-  _saveAlert(alert) {
+  _updateAlerts(alert, remove = false) {
     this._alerts = this._alerts
       .filter(a => a.event !== alert.event);
 
-    this._alerts.push(alert);
+    if(remove) {
+      clearInterval(
+        this._currentIntervals
+          .find(a => a.event = alert.event).intervalId
+        );
+    } else {
+      this._alerts.push(alert);
+    }
 
     return require('fs')
       .writeFileSync('./dist/scrumbot/alerts.json',
@@ -120,7 +112,7 @@ export default class ScrumBot extends XlackBot {
         .splice(that._currentIntervals.indexOf(aux), 1);
     }
 
-    this._saveAlert(alert);
+    this._updateAlerts(alert);
 
     setTimeout(() => {
       that._sendAlert(alert);
@@ -139,13 +131,20 @@ export default class ScrumBot extends XlackBot {
 
   _onStart() {
     super.
-    _onStart();
+      _onStart();
 
     return this.
-    _checkScheduledAlerts();
+      _checkScheduledAlerts();
   }
 
-  run() {
-    return super.run();
+  _unsetAlert(msg) {
+    let alertEvent = msg.split(' ')[2];
+
+    return this
+      ._updateAlerts({
+        event: alertEvent
+      }, true);
   }
+
+  run() { return super.run(); }
 }
