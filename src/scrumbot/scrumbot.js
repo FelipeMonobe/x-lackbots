@@ -140,7 +140,7 @@ export default class ScrumBot extends XlackBot {
   }
 
   _unsetAlert(msg) {
-    let alertEvent = msg.split(' ')[2];
+    let alertEvent = msg.text.split(' ')[2];
 
     return this._updateAlerts({
       event: alertEvent
