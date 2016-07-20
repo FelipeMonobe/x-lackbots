@@ -1,5 +1,5 @@
 [{
-    "message": "BEEP BEEP! Olha a daily aê cambada!",
+    "message": "BEEP BEEP! Olha a daily aê @channel!",
     "event": "daily",
     "time": "15:00",
     "frequencyInDays": 1
