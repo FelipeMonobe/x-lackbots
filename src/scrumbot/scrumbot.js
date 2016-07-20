@@ -76,9 +76,10 @@ export default class ScrumBot extends XlackBot {
     let dayOfWeek = new Date().getDay();
 
     if (dayOfWeek !== 0 && dayOfWeek !== 6)
-      return this._replyChannel(this._alerts
-        .find(a => a.event === alert.event)
-        .message.replace(/"/g, ''));
+      return this._replyChannel('<!channel> ' +
+        this._alerts
+          .find(a => a.event === alert.event)
+          .message.replace(/"/g, ''));
   }
 
   _setAlert(alert) {
